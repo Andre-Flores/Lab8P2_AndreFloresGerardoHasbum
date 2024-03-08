@@ -4,13 +4,14 @@
  */
 package lab8p2_andrefloresgerardohasbum_;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  *
  * @author andre
  */
-public class Torneo {
+public class Torneo implements Serializable{
 
     private String nombre;
     public ArrayList<Participante> participantes = new ArrayList();
@@ -19,10 +20,11 @@ public class Torneo {
     public Torneo() {
     }
 
-    public Torneo(String nombre, boolean flagAbierto, boolean flagGanador) {
+    public Torneo(String nombre, boolean flagAbierto, boolean flagGanador, Participante ganador) {
         this.nombre = nombre;
         this.flagAbierto = flagAbierto;
         this.flagGanador = flagGanador;
+        this.ganador = ganador;
     }
 
     public String getNombre() {
@@ -48,6 +50,15 @@ public class Torneo {
     public void setFlagGanador(boolean flagGanador) {
         this.flagGanador = flagGanador;
     }
+
+    public Participante getGanador() {
+        return ganador;
+    }
+
+    public void setGanador(Participante ganador) {
+        this.ganador = ganador;
+    }
+    
 
     @Override
     public String toString() {

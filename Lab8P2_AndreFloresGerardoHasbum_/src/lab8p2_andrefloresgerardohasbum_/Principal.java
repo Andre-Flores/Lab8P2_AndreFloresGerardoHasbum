@@ -5,8 +5,10 @@
 package lab8p2_andrefloresgerardohasbum_;
 
 import java.awt.Image;
+import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -100,7 +102,6 @@ public class Principal extends javax.swing.JFrame {
         LoginAdmin = new javax.swing.JDialog();
         jPanel5 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -231,7 +232,6 @@ public class Principal extends javax.swing.JFrame {
         );
 
         jPanel5.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 170, 570));
-        jPanel5.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 0, 160, 60));
 
         jList1.setModel(new DefaultListModel());
         jScrollPane1.setViewportView(jList1);
@@ -567,7 +567,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_CrearTorneoMouseClicked
 
     private void btn_TerminarCrearTorneoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_TerminarCrearTorneoMouseClicked
-        torneos.add(new Torneo(tf_nombreTorneo.getText(), true, false));
+        torneos.add(new Torneo(tf_nombreTorneo.getText(), true, false, null));
 
         escribirTorneos(torneos, "torneos.bin");
 
@@ -584,6 +584,31 @@ public class Principal extends javax.swing.JFrame {
         this.setResizable(false);
         usuarioenUso = null;
     }//GEN-LAST:event_jButton2MouseClicked
+
+    public static void escribirTexto(ArrayList<Torneo> lista, String path) throws IOException {
+
+        FileWriter fw = null;
+        BufferedWriter bw = null;
+
+        try {
+
+            fw = new FileWriter(path, false);
+            bw = new BufferedWriter(fw);
+
+            for (Torneo a : lista) {
+                Torneo temp = (Torneo) a;
+                bw.write("EL participante " + temp.getGanador().getNombre() + " ha ganado el torneo " + temp.getNombre());
+            }
+            bw.flush();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        bw.close();
+        fw.close();
+
+    }
 
     /**
      * @param args the command line arguments
@@ -648,7 +673,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
