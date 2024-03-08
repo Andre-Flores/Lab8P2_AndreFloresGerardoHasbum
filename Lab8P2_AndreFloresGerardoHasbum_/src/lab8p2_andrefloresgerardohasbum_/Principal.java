@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -103,9 +104,9 @@ public class Principal extends javax.swing.JFrame {
         jPanel5 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        jl_torneosadmin = new javax.swing.JList<>();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jList2 = new javax.swing.JList<>();
+        jl_personastorneoadmin = new javax.swing.JList<>();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jButton5 = new javax.swing.JButton();
@@ -117,13 +118,13 @@ public class Principal extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jList3 = new javax.swing.JList<>();
+        jl_torneosdisp = new javax.swing.JList<>();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jList4 = new javax.swing.JList<>();
+        jl_torneoscerrados = new javax.swing.JList<>();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jScrollPane5 = new javax.swing.JScrollPane();
-        jList5 = new javax.swing.JList<>();
+        jl_torneosganados = new javax.swing.JList<>();
         jLabel12 = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
         CrearTorneo = new javax.swing.JDialog();
@@ -233,13 +234,13 @@ public class Principal extends javax.swing.JFrame {
 
         jPanel5.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 170, 570));
 
-        jList1.setModel(new DefaultListModel());
-        jScrollPane1.setViewportView(jList1);
+        jl_torneosadmin.setModel(new DefaultListModel());
+        jScrollPane1.setViewportView(jl_torneosadmin);
 
         jPanel5.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 160, 180, 330));
 
-        jList2.setModel(new DefaultListModel());
-        jScrollPane2.setViewportView(jList2);
+        jl_personastorneoadmin.setModel(new DefaultListModel());
+        jScrollPane2.setViewportView(jl_personastorneoadmin);
 
         jPanel5.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 160, 180, 330));
 
@@ -274,6 +275,11 @@ public class Principal extends javax.swing.JFrame {
         jButton7.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jButton7.setForeground(new java.awt.Color(255, 255, 255));
         jButton7.setText("Cerrar Torneo");
+        jButton7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton7MouseClicked(evt);
+            }
+        });
         jPanel5.add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 490, 120, 30));
 
         javax.swing.GroupLayout LoginAdminLayout = new javax.swing.GroupLayout(LoginAdmin.getContentPane());
@@ -323,13 +329,13 @@ public class Principal extends javax.swing.JFrame {
         jPanel7.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 170, 570));
         jPanel7.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 0, 160, 60));
 
-        jList3.setModel(new DefaultListModel());
-        jScrollPane3.setViewportView(jList3);
+        jl_torneosdisp.setModel(new DefaultListModel());
+        jScrollPane3.setViewportView(jl_torneosdisp);
 
         jPanel7.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 160, 120, 330));
 
-        jList4.setModel(new DefaultListModel());
-        jScrollPane4.setViewportView(jList4);
+        jl_torneoscerrados.setModel(new DefaultListModel());
+        jScrollPane4.setViewportView(jl_torneoscerrados);
 
         jPanel7.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 160, 110, 330));
 
@@ -343,8 +349,8 @@ public class Principal extends javax.swing.JFrame {
         jLabel11.setText("Torneos Ganados");
         jPanel7.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 140, -1, -1));
 
-        jList5.setModel(new DefaultListModel());
-        jScrollPane5.setViewportView(jList5);
+        jl_torneosganados.setModel(new DefaultListModel());
+        jScrollPane5.setViewportView(jl_torneosganados);
 
         jPanel7.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 160, 120, 330));
 
@@ -496,6 +502,8 @@ public class Principal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void LoginConfirmMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LoginConfirmMouseClicked
+        DefaultListModel modeloLista = new DefaultListModel();
+        modeloLista = (DefaultListModel) jl_torneosdisp.getModel();
         usuarios = leerUsuarios("usuarios.bin");
 
         String nombreUsuario = Tf_username.getText();
@@ -516,7 +524,16 @@ public class Principal extends javax.swing.JFrame {
                 LoginParticipante.setVisible(true);
                 LoginParticipante.pack();
                 LoginParticipante.setResizable(false);
-
+                torneos = leerTorneos("torneos.bin");
+                for (Torneo torneo : torneos) {
+                    if (torneo.isFlagAbierto()) {
+                        modeloLista.addElement(torneo);
+                    } else if (torneo.isFlagAbierto() == false) {
+                        modeloLista.addElement(torneos);
+                    }
+                }
+                jl_torneosdisp.setModel(modeloLista);
+                //jl_torneosdisp.add(leerTorneos("torneos.bin"));
             } else if (usuarioenUso instanceof Admin) {
                 this.setVisible(false);
 
@@ -527,6 +544,7 @@ public class Principal extends javax.swing.JFrame {
             }
             Tf_username.setText("");
             Tf_Password.setText("");
+
         }
 
     }//GEN-LAST:event_LoginConfirmMouseClicked
@@ -584,6 +602,17 @@ public class Principal extends javax.swing.JFrame {
         this.setResizable(false);
         usuarioenUso = null;
     }//GEN-LAST:event_jButton2MouseClicked
+
+    private void jButton7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton7MouseClicked
+        torneos = leerTorneos("torneos.bin");
+        DefaultListModel modeloListaAdmin = new DefaultListModel();
+        modeloListaAdmin = (DefaultListModel) jl_torneosdisp.getModel();
+        for (Torneo torneo : torneos) {
+
+            modeloListaAdmin.addElement(torneo);
+        }
+
+    }//GEN-LAST:event_jButton7MouseClicked
 
     public static void escribirTexto(ArrayList<Torneo> lista, String path) throws IOException {
 
@@ -676,11 +705,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JList<String> jList1;
-    private javax.swing.JList<String> jList2;
-    private javax.swing.JList<String> jList3;
-    private javax.swing.JList<String> jList4;
-    private javax.swing.JList<String> jList5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel2;
@@ -697,6 +721,11 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JSpinner jSpinner1;
     private javax.swing.JDialog jd_Registrar;
+    private javax.swing.JList<String> jl_personastorneoadmin;
+    private javax.swing.JList<String> jl_torneosadmin;
+    private javax.swing.JList<String> jl_torneoscerrados;
+    private javax.swing.JList<String> jl_torneosdisp;
+    private javax.swing.JList<String> jl_torneosganados;
     private javax.swing.JPanel jpaneltorneo;
     private javax.swing.JRadioButton rb_Administrador;
     private javax.swing.JRadioButton rb_Participante;
