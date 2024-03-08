@@ -655,7 +655,7 @@ public class Principal extends javax.swing.JFrame {
 
             for (Torneo a : lista) {
                 Torneo temp = (Torneo) a;
-                bw.write("EL participante " + temp.getGanador().getNombre() + " ha ganado el torneo " + temp.getNombre());
+                bw.write("El participante " + temp.getGanador().getNombre() + " ha ganado el torneo " + temp.getNombre());
             }
             bw.flush();
 
