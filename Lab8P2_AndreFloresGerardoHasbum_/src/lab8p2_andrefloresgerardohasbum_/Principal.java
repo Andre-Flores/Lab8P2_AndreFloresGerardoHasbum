@@ -580,7 +580,6 @@ public class Principal extends javax.swing.JFrame {
         jd_Registrar.setVisible(true);
         jd_Registrar.setResizable(false);
 
-        // TODO add your handling code here:
     }//GEN-LAST:event_SignUpButtonMouseClicked
 
     private void Btn_crearUsuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Btn_crearUsuarioMouseClicked
@@ -597,7 +596,6 @@ public class Principal extends javax.swing.JFrame {
         escribirUsuarios(usuarios, "usuarios.bin");
 
         JOptionPane.showMessageDialog(this, "Registro de Usuario terminado con exito");
-        // TODO add your handling code here:
     }//GEN-LAST:event_Btn_crearUsuarioMouseClicked
 
     private void btn_CrearTorneoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_CrearTorneoMouseClicked
@@ -629,7 +627,6 @@ public class Principal extends javax.swing.JFrame {
 
     private void jButton7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton7MouseClicked
 
-        
 
     }//GEN-LAST:event_jButton7MouseClicked
 
