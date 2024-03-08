@@ -29,7 +29,6 @@ public class Principal extends javax.swing.JFrame {
     public Principal() {
         initComponents();
         setImageLabel(jLabel1, "src/Fotos/Logo_UNITEC.png");
-        usuarios = leerUsuarios("usuarios.bin");
 
     }
 
@@ -57,6 +56,25 @@ public class Principal extends javax.swing.JFrame {
             e.printStackTrace();
         }
         return usuarios;
+    }
+
+    public static void escribirTorneos(ArrayList<Torneo> torneos, String nombreArchivo) {
+        try (ObjectOutputStream OOS = new ObjectOutputStream(new FileOutputStream(nombreArchivo))) {
+            OOS.writeObject(torneos);
+            System.out.println("Torneo guardado.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static ArrayList<Torneo> leerTorneos(String nombreArchivo) {
+        ArrayList<Torneo> torneos = new ArrayList();
+        try (ObjectInputStream OIS = new ObjectInputStream(new FileInputStream(nombreArchivo))) {
+            torneos = (ArrayList<Torneo>) OIS.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return torneos;
     }
 
     /**
@@ -90,7 +108,7 @@ public class Principal extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        btn_CrearTorneo = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
         LoginParticipante = new javax.swing.JDialog();
         jPanel7 = new javax.swing.JPanel();
@@ -108,13 +126,13 @@ public class Principal extends javax.swing.JFrame {
         jLabel12 = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
         CrearTorneo = new javax.swing.JDialog();
-        jPanel9 = new javax.swing.JPanel();
+        jpaneltorneo = new javax.swing.JPanel();
         jPanel10 = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        tf_nombreTorneo = new javax.swing.JTextField();
         jSpinner1 = new javax.swing.JSpinner();
-        jButton4 = new javax.swing.JButton();
+        btn_TerminarCrearTorneo = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         LoginConfirm = new javax.swing.JButton();
@@ -241,11 +259,16 @@ public class Principal extends javax.swing.JFrame {
         jButton5.setText("Marcar Ganador");
         jPanel5.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 490, 120, 30));
 
-        jButton6.setBackground(new java.awt.Color(0, 51, 204));
-        jButton6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButton6.setForeground(new java.awt.Color(255, 255, 255));
-        jButton6.setText("Crear Torneo");
-        jPanel5.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 0, 120, 70));
+        btn_CrearTorneo.setBackground(new java.awt.Color(0, 51, 204));
+        btn_CrearTorneo.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btn_CrearTorneo.setForeground(new java.awt.Color(255, 255, 255));
+        btn_CrearTorneo.setText("Crear Torneo");
+        btn_CrearTorneo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_CrearTorneoMouseClicked(evt);
+            }
+        });
+        jPanel5.add(btn_CrearTorneo, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 0, 120, 70));
 
         jButton7.setBackground(new java.awt.Color(0, 0, 204));
         jButton7.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -274,6 +297,11 @@ public class Principal extends javax.swing.JFrame {
         jButton2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jButton2.setForeground(new java.awt.Color(255, 255, 255));
         jButton2.setText("Salir");
+        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton2MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -342,9 +370,9 @@ public class Principal extends javax.swing.JFrame {
             .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        jPanel9.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel9.setForeground(new java.awt.Color(0, 0, 0));
-        jPanel9.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jpaneltorneo.setBackground(new java.awt.Color(255, 255, 255));
+        jpaneltorneo.setForeground(new java.awt.Color(0, 0, 0));
+        jpaneltorneo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel10.setBackground(new java.awt.Color(255, 0, 51));
 
@@ -359,34 +387,39 @@ public class Principal extends javax.swing.JFrame {
             .addGap(0, 570, Short.MAX_VALUE)
         );
 
-        jPanel9.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 170, 570));
+        jpaneltorneo.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 170, 570));
 
         jLabel14.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(0, 0, 0));
         jLabel14.setText("Nombre del Torneo");
-        jPanel9.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 30, -1, -1));
+        jpaneltorneo.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 30, -1, -1));
 
         jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel16.setForeground(new java.awt.Color(0, 0, 0));
         jLabel16.setText("Rondas");
-        jPanel9.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 170, -1, -1));
-        jPanel9.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 60, 140, 20));
-        jPanel9.add(jSpinner1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 210, 120, 30));
+        jpaneltorneo.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 170, -1, -1));
+        jpaneltorneo.add(tf_nombreTorneo, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 60, 140, 30));
+        jpaneltorneo.add(jSpinner1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 210, 120, 30));
 
-        jButton4.setBackground(new java.awt.Color(0, 0, 204));
-        jButton4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButton4.setText("Crear Torneo");
-        jPanel9.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 360, 130, 80));
+        btn_TerminarCrearTorneo.setBackground(new java.awt.Color(0, 0, 204));
+        btn_TerminarCrearTorneo.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btn_TerminarCrearTorneo.setText("Crear Torneo");
+        btn_TerminarCrearTorneo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_TerminarCrearTorneoMouseClicked(evt);
+            }
+        });
+        jpaneltorneo.add(btn_TerminarCrearTorneo, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 370, 130, 80));
 
         javax.swing.GroupLayout CrearTorneoLayout = new javax.swing.GroupLayout(CrearTorneo.getContentPane());
         CrearTorneo.getContentPane().setLayout(CrearTorneoLayout);
         CrearTorneoLayout.setHorizontalGroup(
             CrearTorneoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jpaneltorneo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         CrearTorneoLayout.setVerticalGroup(
             CrearTorneoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jpaneltorneo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -463,6 +496,7 @@ public class Principal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void LoginConfirmMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LoginConfirmMouseClicked
+        usuarios = leerUsuarios("usuarios.bin");
 
         String nombreUsuario = Tf_username.getText();
         String contrasenia = Tf_Password.getText();
@@ -491,7 +525,8 @@ public class Principal extends javax.swing.JFrame {
                 LoginAdmin.setResizable(false);
 
             }
-
+            Tf_username.setText("");
+            Tf_Password.setText("");
         }
 
     }//GEN-LAST:event_LoginConfirmMouseClicked
@@ -522,6 +557,33 @@ public class Principal extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, "Registro de Usuario terminado con exito");
         // TODO add your handling code here:
     }//GEN-LAST:event_Btn_crearUsuarioMouseClicked
+
+    private void btn_CrearTorneoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_CrearTorneoMouseClicked
+        LoginAdmin.setVisible(false);
+
+        CrearTorneo.setVisible(true);
+        CrearTorneo.pack();
+        CrearTorneo.setResizable(false);
+    }//GEN-LAST:event_btn_CrearTorneoMouseClicked
+
+    private void btn_TerminarCrearTorneoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_TerminarCrearTorneoMouseClicked
+        torneos.add(new Torneo(tf_nombreTorneo.getText(), true, false));
+
+        escribirTorneos(torneos, "torneos.bin");
+
+        JOptionPane.showMessageDialog(this, "Registro de torneo terminado con exito");
+        CrearTorneo.setVisible(false);
+        LoginAdmin.setVisible(true);
+        LoginAdmin.pack();
+    }//GEN-LAST:event_btn_TerminarCrearTorneoMouseClicked
+
+    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+        LoginParticipante.setVisible(false);
+        this.setVisible(true);
+        this.pack();
+        this.setResizable(false);
+        usuarioenUso = null;
+    }//GEN-LAST:event_jButton2MouseClicked
 
     /**
      * @param args the command line arguments
@@ -569,12 +631,12 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JTextField Tf_PasswordRegistrar;
     private javax.swing.JTextField Tf_username;
     private javax.swing.JTextField Tf_usernameRegistrar;
+    private javax.swing.JButton btn_CrearTorneo;
+    private javax.swing.JButton btn_TerminarCrearTorneo;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -604,18 +666,19 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
-    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JSpinner jSpinner1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JDialog jd_Registrar;
+    private javax.swing.JPanel jpaneltorneo;
     private javax.swing.JRadioButton rb_Administrador;
     private javax.swing.JRadioButton rb_Participante;
+    private javax.swing.JTextField tf_nombreTorneo;
     // End of variables declaration//GEN-END:variables
 ArrayList<User> usuarios = new ArrayList();
     User usuarioenUso;
+    ArrayList<Torneo> torneos = new ArrayList();
 }
