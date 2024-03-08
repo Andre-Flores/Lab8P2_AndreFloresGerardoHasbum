@@ -103,6 +103,7 @@ public class Principal extends javax.swing.JFrame {
         LoginAdmin = new javax.swing.JDialog();
         jPanel5 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
+        jButton4 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jl_torneosadmin = new javax.swing.JList<>();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -221,15 +222,36 @@ public class Principal extends javax.swing.JFrame {
 
         jPanel6.setBackground(new java.awt.Color(255, 0, 51));
 
+        jButton4.setBackground(new java.awt.Color(0, 51, 204));
+        jButton4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jButton4.setForeground(new java.awt.Color(255, 255, 255));
+        jButton4.setText("Salir");
+        jButton4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton4MouseClicked(evt);
+            }
+        });
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 170, Short.MAX_VALUE)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGap(45, 45, 45)
+                .addComponent(jButton4)
+                .addContainerGap(53, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 570, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addContainerGap(472, Short.MAX_VALUE)
+                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28))
         );
 
         jPanel5.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 170, 570));
@@ -505,7 +527,9 @@ public class Principal extends javax.swing.JFrame {
         DefaultListModel modeloLista = new DefaultListModel();
         modeloLista = (DefaultListModel) jl_torneosdisp.getModel();
         usuarios = leerUsuarios("usuarios.bin");
-
+        torneos = leerTorneos("torneos.bin");
+        DefaultListModel modeloListaAdmin = new DefaultListModel();
+        modeloListaAdmin = (DefaultListModel) jl_torneosadmin.getModel();
         String nombreUsuario = Tf_username.getText();
         String contrasenia = Tf_Password.getText();
 
@@ -533,8 +557,8 @@ public class Principal extends javax.swing.JFrame {
                     }
                 }
                 jl_torneosdisp.setModel(modeloLista);
-                //jl_torneosdisp.add(leerTorneos("torneos.bin"));
             } else if (usuarioenUso instanceof Admin) {
+
                 this.setVisible(false);
 
                 LoginAdmin.setVisible(true);
@@ -604,15 +628,22 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2MouseClicked
 
     private void jButton7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton7MouseClicked
-        torneos = leerTorneos("torneos.bin");
-        DefaultListModel modeloListaAdmin = new DefaultListModel();
-        modeloListaAdmin = (DefaultListModel) jl_torneosdisp.getModel();
-        for (Torneo torneo : torneos) {
 
-            modeloListaAdmin.addElement(torneo);
-        }
 
     }//GEN-LAST:event_jButton7MouseClicked
+
+    private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
+
+        LoginAdmin.setVisible(false);
+        this.setVisible(true);
+        this.pack();
+        this.setResizable(false);
+        usuarioenUso = null;
+    }//GEN-LAST:event_jButton4MouseClicked
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     public static void escribirTexto(ArrayList<Torneo> lista, String path) throws IOException {
 
@@ -690,6 +721,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
