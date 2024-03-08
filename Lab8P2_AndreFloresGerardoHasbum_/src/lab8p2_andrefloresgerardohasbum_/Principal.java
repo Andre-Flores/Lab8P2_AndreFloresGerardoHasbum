@@ -5,10 +5,17 @@
 package lab8p2_andrefloresgerardohasbum_;
 
 import java.awt.Image;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.ListModel;
 
 /**
@@ -17,9 +24,12 @@ import javax.swing.ListModel;
  */
 public class Principal extends javax.swing.JFrame {
 
+    public static boolean logged = false;
+
     public Principal() {
         initComponents();
         setImageLabel(jLabel1, "src/Fotos/Logo_UNITEC.png");
+        usuarios = leerUsuarios("usuarios.bin");
 
     }
 
@@ -28,6 +38,25 @@ public class Principal extends javax.swing.JFrame {
         Icon icon = new ImageIcon(image.getImage().getScaledInstance(lnombre.getWidth(), lnombre.getHeight(), Image.SCALE_DEFAULT));
         lnombre.setIcon(icon);
         this.repaint();
+    }
+
+    public static void escribirUsuarios(ArrayList<User> usuarios, String nombreArchivo) {
+        try (ObjectOutputStream OOS = new ObjectOutputStream(new FileOutputStream(nombreArchivo))) {
+            OOS.writeObject(usuarios);
+            System.out.println("usuario guardado.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static ArrayList<User> leerUsuarios(String nombreArchivo) {
+        ArrayList<User> usuarios = new ArrayList();
+        try (ObjectInputStream OIS = new ObjectInputStream(new FileInputStream(nombreArchivo))) {
+            usuarios = (ArrayList<User>) OIS.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return usuarios;
     }
 
     /**
@@ -46,9 +75,9 @@ public class Principal extends javax.swing.JFrame {
         Tf_usernameRegistrar = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         Tf_PasswordRegistrar = new javax.swing.JTextField();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jButton1 = new javax.swing.JButton();
+        rb_Administrador = new javax.swing.JRadioButton();
+        rb_Participante = new javax.swing.JRadioButton();
+        Btn_crearUsuario = new javax.swing.JButton();
         buttonGroup1 = new javax.swing.ButtonGroup();
         LoginAdmin = new javax.swing.JDialog();
         jPanel5 = new javax.swing.JPanel();
@@ -60,6 +89,9 @@ public class Principal extends javax.swing.JFrame {
         jList2 = new javax.swing.JList<>();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
+        jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
         LoginParticipante = new javax.swing.JDialog();
         jPanel7 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
@@ -129,23 +161,28 @@ public class Principal extends javax.swing.JFrame {
         Tf_PasswordRegistrar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jPanel3.add(Tf_PasswordRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 300, 210, 50));
 
-        buttonGroup1.add(jRadioButton1);
-        jRadioButton1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jRadioButton1.setForeground(new java.awt.Color(0, 0, 0));
-        jRadioButton1.setText("Administrador");
-        jPanel3.add(jRadioButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 410, -1, -1));
+        buttonGroup1.add(rb_Administrador);
+        rb_Administrador.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        rb_Administrador.setForeground(new java.awt.Color(0, 0, 0));
+        rb_Administrador.setText("Administrador");
+        jPanel3.add(rb_Administrador, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 410, -1, -1));
 
-        buttonGroup1.add(jRadioButton2);
-        jRadioButton2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jRadioButton2.setForeground(new java.awt.Color(0, 0, 0));
-        jRadioButton2.setText("Participante");
-        jPanel3.add(jRadioButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 410, -1, -1));
+        buttonGroup1.add(rb_Participante);
+        rb_Participante.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        rb_Participante.setForeground(new java.awt.Color(0, 0, 0));
+        rb_Participante.setText("Participante");
+        jPanel3.add(rb_Participante, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 410, -1, -1));
 
-        jButton1.setBackground(new java.awt.Color(255, 0, 0));
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Crear");
-        jPanel3.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 483, 90, 60));
+        Btn_crearUsuario.setBackground(new java.awt.Color(255, 0, 0));
+        Btn_crearUsuario.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        Btn_crearUsuario.setForeground(new java.awt.Color(255, 255, 255));
+        Btn_crearUsuario.setText("Crear");
+        Btn_crearUsuario.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Btn_crearUsuarioMouseClicked(evt);
+            }
+        });
+        jPanel3.add(Btn_crearUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 483, 90, 60));
 
         javax.swing.GroupLayout jd_RegistrarLayout = new javax.swing.GroupLayout(jd_Registrar.getContentPane());
         jd_Registrar.getContentPane().setLayout(jd_RegistrarLayout);
@@ -197,6 +234,24 @@ public class Principal extends javax.swing.JFrame {
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("Personas dentro del torneo");
         jPanel5.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 120, -1, -1));
+
+        jButton5.setBackground(new java.awt.Color(255, 0, 51));
+        jButton5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jButton5.setForeground(new java.awt.Color(255, 255, 255));
+        jButton5.setText("Marcar Ganador");
+        jPanel5.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 490, 120, 30));
+
+        jButton6.setBackground(new java.awt.Color(0, 51, 204));
+        jButton6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jButton6.setForeground(new java.awt.Color(255, 255, 255));
+        jButton6.setText("Crear Torneo");
+        jPanel5.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 0, 120, 70));
+
+        jButton7.setBackground(new java.awt.Color(0, 0, 204));
+        jButton7.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jButton7.setForeground(new java.awt.Color(255, 255, 255));
+        jButton7.setText("Cerrar Torneo");
+        jPanel5.add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 490, 120, 30));
 
         javax.swing.GroupLayout LoginAdminLayout = new javax.swing.GroupLayout(LoginAdmin.getContentPane());
         LoginAdmin.getContentPane().setLayout(LoginAdminLayout);
@@ -321,7 +376,7 @@ public class Principal extends javax.swing.JFrame {
         jButton4.setBackground(new java.awt.Color(0, 0, 204));
         jButton4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jButton4.setText("Crear Torneo");
-        jPanel9.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 400, 130, 80));
+        jPanel9.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 360, 130, 80));
 
         javax.swing.GroupLayout CrearTorneoLayout = new javax.swing.GroupLayout(CrearTorneo.getContentPane());
         CrearTorneo.getContentPane().setLayout(CrearTorneoLayout);
@@ -357,11 +412,21 @@ public class Principal extends javax.swing.JFrame {
         LoginConfirm.setBackground(new java.awt.Color(204, 0, 0));
         LoginConfirm.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         LoginConfirm.setText("Iniciar sesion");
+        LoginConfirm.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                LoginConfirmMouseClicked(evt);
+            }
+        });
         jPanel1.add(LoginConfirm, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 450, 150, 70));
 
         SignUpButton.setBackground(new java.awt.Color(0, 51, 204));
         SignUpButton.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         SignUpButton.setText("Registrar");
+        SignUpButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                SignUpButtonMouseClicked(evt);
+            }
+        });
         jPanel1.add(SignUpButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 450, 150, 70));
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 0, 160, 60));
 
@@ -396,6 +461,67 @@ public class Principal extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void LoginConfirmMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LoginConfirmMouseClicked
+
+        String nombreUsuario = Tf_username.getText();
+        String contrasenia = Tf_Password.getText();
+
+        for (User usuario : usuarios) {
+            if (nombreUsuario.equals(usuario.getNombre()) && contrasenia.equals(usuario.getPassword())) {
+                usuarioenUso = usuario;
+                logged = true;
+                break;
+            }
+        }
+
+        if (logged) {
+            if (usuarioenUso instanceof Participante) {
+                this.setVisible(false);
+
+                LoginParticipante.setVisible(true);
+                LoginParticipante.pack();
+                LoginParticipante.setResizable(false);
+
+            } else if (usuarioenUso instanceof Admin) {
+                this.setVisible(false);
+
+                LoginAdmin.setVisible(true);
+                LoginAdmin.pack();
+                LoginAdmin.setResizable(false);
+
+            }
+
+        }
+
+    }//GEN-LAST:event_LoginConfirmMouseClicked
+
+    private void SignUpButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SignUpButtonMouseClicked
+        this.setVisible(false);
+        jd_Registrar.pack();
+        jd_Registrar.setLocationRelativeTo(this);
+        jd_Registrar.setVisible(true);
+        jd_Registrar.setResizable(false);
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_SignUpButtonMouseClicked
+
+    private void Btn_crearUsuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Btn_crearUsuarioMouseClicked
+        this.setVisible(false);
+        jd_Registrar.setVisible(false);
+
+        if (rb_Administrador.isSelected()) {
+            usuarios.add(new Admin(Tf_usernameRegistrar.getText(), Tf_PasswordRegistrar.getText(), 0));
+
+        } else if (rb_Participante.isSelected()) {
+            usuarios.add(new Participante(Tf_usernameRegistrar.getText(), Tf_PasswordRegistrar.getText()));
+        }
+        this.setVisible(true);
+        escribirUsuarios(usuarios, "usuarios.bin");
+
+        JOptionPane.showMessageDialog(this, "Registro de Usuario terminado con exito");
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Btn_crearUsuarioMouseClicked
 
     /**
      * @param args the command line arguments
@@ -433,6 +559,7 @@ public class Principal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Btn_crearUsuario;
     private javax.swing.JDialog CrearTorneo;
     private javax.swing.JDialog LoginAdmin;
     private javax.swing.JButton LoginConfirm;
@@ -443,10 +570,12 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JTextField Tf_username;
     private javax.swing.JTextField Tf_usernameRegistrar;
     private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -476,8 +605,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -486,5 +613,9 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JSpinner jSpinner1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JDialog jd_Registrar;
+    private javax.swing.JRadioButton rb_Administrador;
+    private javax.swing.JRadioButton rb_Participante;
     // End of variables declaration//GEN-END:variables
+ArrayList<User> usuarios = new ArrayList();
+    User usuarioenUso;
 }
